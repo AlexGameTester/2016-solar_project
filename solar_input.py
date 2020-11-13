@@ -1,7 +1,7 @@
 # coding: utf-8
 # license: GPLv3
 
-from solar_objects import Star, Planet
+from solar_objects import Star, Planet, ObjectType
 
 
 def read_space_objects_data_from_file(input_filename):
@@ -19,10 +19,13 @@ def read_space_objects_data_from_file(input_filename):
             if len(line.strip()) == 0 or line[0] == '#':
                 continue  # пустые строки и строки-комментарии пропускаем
             object_type = line.split()[0].lower()
-            if object_type == "star":  # FIXME: do the same for planet
+            if object_type == ObjectType.star:  # FIXME: do the same for planet
                 star = Star()
                 parse_star_parameters(line, star)
-                objects.append(star)
+            elif object_type == ObjectType.planet:  # FIXME: do the same for planet
+                planet = Planet()
+                parse_planet_parameters(line, star)
+                objects.append(planet)
             else:
                 print("Unknown space object")
 
@@ -81,6 +84,7 @@ def write_space_objects_data_to_file(output_filename, space_objects):
             # FIXME: should store real values
 
 # FIXME: хорошо бы ещё сделать функцию, сохранающую статистику в заданный файл...
+
 
 if __name__ == "__main__":
     print("This module is not for direct call!")

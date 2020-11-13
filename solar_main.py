@@ -4,8 +4,11 @@
 import tkinter
 from tkinter.filedialog import *
 from solar_vis import *
+# import solar_vis as sv
 from solar_model import *
+# import solar_model as sm
 from solar_input import *
+# import solar_input as si
 
 perform_execution = False
 """Флаг цикличности выполнения расчёта"""
@@ -84,9 +87,9 @@ def open_file_dialog():
     calculate_scale_factor(max_distance)
 
     for obj in space_objects:
-        if obj.type == 'star':
+        if obj.type == ObjectType.star:
             create_star_image(space, obj)
-        elif obj.type == 'planet':
+        elif obj.type == ObjectType.planet:
             create_planet_image(space, obj)
         else:
             raise AssertionError()
@@ -147,6 +150,7 @@ def main():
 
     root.mainloop()
     print('Modelling finished!')
+
 
 if __name__ == "__main__":
     main()
