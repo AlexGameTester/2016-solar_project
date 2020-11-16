@@ -71,6 +71,14 @@ def stop_execution():
     print('Paused execution.')
 
 
+def _clear_space():
+    """
+    Deletes all existing objects from space
+    """
+    for obj in space_objects:
+        space.delete(obj.image)
+
+
 def open_file_dialog():
     """Открывает диалоговое окно выбора имени файла и вызывает
     функцию считывания параметров системы небесных тел из данного файла.
@@ -79,18 +87,15 @@ def open_file_dialog():
     global space_objects
     global perform_execution
     perform_execution = False
-    for obj in space_objects:
-        space.delete(obj.image)  # удаление старых изображений планет
+    _clear_space()
     in_filename = askopenfilename(filetypes=(("Text file", ".txt"),))
     space_objects = read_space_objects_data_from_file(in_filename)
     max_distance = max([max(abs(obj.x), abs(obj.y)) for obj in space_objects])
     calculate_scale_factor(max_distance)
 
     for obj in space_objects:
-        if obj.type == ObjectType.star or obj.type == ObjectType.planet:
-            create_object_image(space, obj)
-        else:
-            raise AssertionError()
+        assert obj.type == ObjectType.star or obj.type == ObjectType.planet, 'Wrong type of space object'
+        create_object_image(space, obj)
 
 
 def save_file_dialog():

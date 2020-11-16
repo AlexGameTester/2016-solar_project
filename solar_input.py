@@ -2,6 +2,7 @@
 # license: GPLv3
 
 from solar_objects import Star, Planet, ObjectType
+import re
 
 
 def read_space_objects_data_from_file(input_filename):
@@ -14,22 +15,80 @@ def read_space_objects_data_from_file(input_filename):
     """
 
     objects = []
-    with open(input_filename) as input_file:
+    with open(input_filename, encoding='cp1251') as input_file:
         for line in input_file:
             if len(line.strip()) == 0 or line[0] == '#':
                 continue  # пустые строки и строки-комментарии пропускаем
-            object_type = line.split()[0].lower()
-            if object_type == ObjectType.star:  # FIXME: do the same for planet
-                star = Star()
-                parse_star_parameters(line, star)
-            elif object_type == ObjectType.planet:  # FIXME: do the same for planet
-                planet = Planet()
-                parse_planet_parameters(line, star)
-                objects.append(planet)
+            try:
+                obj = parse_object_parameters(line)
+                objects.append(obj)
+            except ValueError:
+                print('Incorrect line format')
+
             else:
                 print("Unknown space object")
 
     return objects
+
+
+def parse_object_parameters(line: str):
+    """
+    Reads space object parameters from string line
+    Входная строка должна иметь слеюущий формат:
+    Star/Planet <радиус в пикселах> <цвет> <масса> <x> <y> <Vx> <Vy>
+
+    Здесь (x, y) — координаты зведы, (Vx, Vy) — скорость.
+    Пример строки:
+    Star 10 red 1000 1 2 3 4
+
+    @param line: a string that describes object
+    @raise ValueError: raised is line format is incorrect
+    """
+    pattern = r'(Star|Planet)\s+([0-9.,eE\-]+)\s+(\w+)\s+([0-9.,eE\-]+)\s+([0-9.,eE\-]+)\s+([0-9.,eE\-]+)\s+([0-9.,' \
+              r'eE\-]+)\s+([0-9.,eE\-]+)\s+\n?'
+
+    match = re.match(pattern, line)
+    if match is None:
+        raise ValueError('Line format is not correct')
+
+    obj = None
+
+    obj_type = match.group(1)
+    if obj_type == 'Star':
+        obj = Star()
+    elif obj_type == 'Planet':
+        obj = Planet()
+    else:  # must never occur, but still
+        raise ValueError('Line format is not correct')
+
+    radius = float(match.group(2))
+    if radius < 0:
+        raise ValueError('Line format is not correct')
+    else:
+        obj.R = radius
+
+    color = match.group(3)
+    obj.color = color
+
+    mass = float(match.group(4))
+    if mass < 0:
+        raise ValueError('Line format is not correct')
+    else:
+        obj.m = mass
+
+    x = float(match.group(5))
+    obj.x = float(x)
+
+    y = float(match.group(6))
+    obj.y = float(y)
+
+    vx = float(match.group(7))
+    obj.Vx = float(vx)
+
+    vy = float(match.group(8))
+    obj.Vy = float(vy)
+
+    return obj
 
 
 def parse_star_parameters(line, star):
