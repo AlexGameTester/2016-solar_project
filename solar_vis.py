@@ -1,5 +1,6 @@
 # coding: utf-8
 # license: GPLv3
+from solar_objects import SpaceObject
 
 """Модуль визуализации.
 Нигде, кроме этого модуля, не используются экранные координаты объектов.
@@ -57,30 +58,19 @@ def scale_y(y):
     return int(-1 * y * scale_factor) + window_height//2
 
 
-def create_star_image(space, star):
-    """Создаёт отображаемый объект звезды.
+def create_object_image(space, obj: SpaceObject):
+    """Создаёт отображаемый объект космического тела.
 
     Параметры:
 
     **space** — холст для рисования.
-    **star** — объект звезды.
+    **obj** — космическое тело
     """
 
-    x = scale_x(star.x)
-    y = scale_y(star.y)
-    r = star.R
-    star.image = space.create_oval([x - r, y - r], [x + r, y + r], fill=star.color)
-
-
-def create_planet_image(space, planet):
-    """Создаёт отображаемый объект планеты.
-
-    Параметры:
-
-    **space** — холст для рисования.
-    **planet** — объект планеты.
-    """
-    pass  # FIXME: сделать как у звезды
+    x = scale_x(obj.x)
+    y = scale_y(obj.y)
+    r = obj.R
+    obj.image = space.create_oval([x - r, y - r], [x + r, y + r], fill=obj.color)
 
 
 def update_system_name(space, system_name):
