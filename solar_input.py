@@ -1,7 +1,7 @@
 # coding: utf-8
 # license: GPLv3
 
-from solar_objects import Star, Planet, ObjectType
+from solar_objects import Star, Planet, ObjectType, SpaceObject
 import re
 
 
@@ -97,22 +97,22 @@ def write_space_objects_data_to_file(output_filename, space_objects):
     Star <радиус в пикселах> <цвет> <масса> <x> <y> <Vx> <Vy>
     Planet <радиус в пикселах> <цвет> <масса> <x> <y> <Vx> <Vy>
 
-    Параметры:
+    @param output_filename: name of the file to put out in
+    @param space_objects: a list of space objects
 
-    **output_filename** — имя входного файла
-    **space_objects** — список объектов планет и звёзд
+    @raise ValueError: object type is not Star or Planet
     """
     with open(output_filename, 'w') as out_file:
         for obj in space_objects:
-            if type(obj) is Star: 
-                out_file.write("Star" + " " + "{:e} {} {:e} {:e} {:e} {:e} {:e}".format(obj.R, obj.color, obj.m, 
-                               obj.x,obj.y, obj.Vx, obj.Vy) + "\n")
+            if obj.type == ObjectType.star:
+                out_file.write("Star" + " " + "{:e} {} {:e} {:e} {:e} {:e} {:e}".format(obj.R, obj.color, obj.m,
+                               obj.x, obj.y, obj.Vx, obj.Vy) + "\n")
                 
-            elif type(obj) is Planet:
+            elif obj.type == ObjectType.planet:
                 out_file.write("Planet" + " " + "{:e} {} {:e} {:e} {:e} {:e} {:e}".format(obj.R, obj.color, obj.m, 
-                               obj.x,obj.y, obj.Vx, obj.Vy) + "\n")
-            else :
-                print("GG")                                      
+                               obj.x, obj.y, obj.Vx, obj.Vy) + "\n")
+            else:
+                raise ValueError('Object type is incorrect')
             
 
 # FIXME: хорошо бы ещё сделать функцию, сохранающую статистику в заданный файл...
