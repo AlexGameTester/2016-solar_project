@@ -104,8 +104,16 @@ def write_space_objects_data_to_file(output_filename, space_objects):
     """
     with open(output_filename, 'w') as out_file:
         for obj in space_objects:
-            print(out_file, "%s %d %s %f" % ('1', 2, '3', 4.5))
-            # FIXME: should store real values
+            if type(obj) is Star: 
+                out_file.write("Star" + " " + "{:e} {} {:e} {:e} {:e} {:e} {:e}".format(obj.R, obj.color, obj.m, 
+                               obj.x,obj.y, obj.Vx, obj.Vy) + "\n")
+                
+            elif type(obj) is Planet:
+                out_file.write("Planet" + " " + "{:e} {} {:e} {:e} {:e} {:e} {:e}".format(obj.R, obj.color, obj.m, 
+                               obj.x,obj.y, obj.Vx, obj.Vy) + "\n")
+            else :
+                print("GG")                                      
+            
 
 # FIXME: хорошо бы ещё сделать функцию, сохранающую статистику в заданный файл...
 
