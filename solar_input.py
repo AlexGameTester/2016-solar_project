@@ -44,8 +44,8 @@ def parse_object_parameters(line: str):
     @param line: a string that describes object
     @raise ValueError: raised is line format is incorrect
     """
-    pattern = r'(Star|Planet)\s+([0-9.,eE\-]+)\s+(\w+)\s+([0-9.,eE\-]+)\s+([0-9.,eE\-]+)\s+([0-9.,eE\-]+)\s+([0-9.,' \
-              r'eE\-]+)\s+([0-9.,eE\-]+)\s+\n?'
+    pattern = r'(Star|Planet)\s+([0-9.,eE\-+]+)\s+(\w+)\s+([0-9.,eE\-+]+)\s+([0-9.,eE\-+]+)\s+([0-9.,eE\-+]+)\s+([0-9.,' \
+              r'eE\-+]+)\s+([0-9.,eE\-+]+)\s+\n?'
 
     match = re.match(pattern, line)
     if match is None:
