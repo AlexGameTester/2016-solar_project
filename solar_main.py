@@ -37,14 +37,11 @@ def execution():
     """
     global physical_time
     global displayed_time
-     if len(time_step.get()) == 0 :
+    if len(time_step.get()) == 0:
         time_step_double = 0
-       
-        print("no variable, sugar")
-    else :
+    else:
         time_step_double = getdouble(time_step.get())
 
-    
     recalculate_space_objects_positions(space_objects, time_step_double)
     for body in space_objects:
         update_object_position(space, body)
