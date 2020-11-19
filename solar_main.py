@@ -37,11 +37,19 @@ def execution():
     """
     global physical_time
     global displayed_time
-    recalculate_space_objects_positions(space_objects, time_step.get())
-    for body in space_objects:
-        update_object_position(space, body)
-    physical_time += time_step.get()
-    displayed_time.set("%.1f" % physical_time + " seconds gone")
+    try : 
+        recalculate_space_objects_positions(space_objects, time_step.get())
+        for body in space_objects:
+            update_object_position(space, body)
+        physical_time += time_step.get()
+        displayed_time.set("%.1f" % physical_time + " seconds gone")
+    except :
+        recalculate_space_objects_positions(space_objects, 0)
+        for body in space_objects:
+            update_object_position(space, body)
+        physical_time += 0
+        displayed_time.set("%.1f" % physical_time + " seconds gone")
+        print("no variable, sugar")
 
     if perform_execution:
         space.after(101 - int(time_speed.get()), execution)
