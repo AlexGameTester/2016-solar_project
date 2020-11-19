@@ -37,11 +37,21 @@ def execution():
     """
     global physical_time
     global displayed_time
-    recalculate_space_objects_positions(space_objects, time_step.get())
-    for body in space_objects:
-        update_object_position(space, body)
-    physical_time += time_step.get()
-    displayed_time.set("%.1f" % physical_time + " seconds gone")
+    if len(time_step.get()) == 0 :
+        recalculate_space_objects_positions(space_objects, 0)
+        for body in space_objects:
+            update_object_position(space, body)
+        physical_time += 0
+        displayed_time.set("%.1f" % physical_time + " seconds gone")
+        print("no variable, sugar")
+    
+    else :
+        time_step_double = getdouble(time_step.get())
+        recalculate_space_objects_positions(space_objects, time_step_double)
+        for body in space_objects:
+            update_object_position(space, body)
+        physical_time += time_step_double
+        displayed_time.set("%.1f" % physical_time + " seconds gone")
 
     if perform_execution:
         space.after(101 - int(time_speed.get()), execution)
@@ -132,7 +142,7 @@ def main():
     start_button = tkinter.Button(frame, text="Start", command=start_execution, width=6)
     start_button.pack(side=tkinter.LEFT)
 
-    time_step = tkinter.DoubleVar()
+    time_step = tkinter.StringVar()
     time_step.set(1)
     time_step_entry = tkinter.Entry(frame, textvariable=time_step)
     time_step_entry.pack(side=tkinter.LEFT)
