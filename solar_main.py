@@ -91,16 +91,29 @@ def open_file_dialog():
     """
     global space_objects
     global perform_execution
+    global physical_time
+    
     perform_execution = False
-    _clear_space()
     in_filename = askopenfilename(filetypes=(("Text file", ".txt"),))
-    space_objects = read_space_objects_data_from_file(in_filename)
-    max_distance = max([max(abs(obj.x), abs(obj.y)) for obj in space_objects])
-    calculate_scale_factor(max_distance)
+    
+    if len(in_filename) == 0 :
+        pass
+    else : 
+        _clear_space()
+        space_objects = read_space_objects_data_from_file(in_filename)
+        
+        max_distance = max([max(abs(obj.x), abs(obj.y)) for obj in space_objects])
+        calculate_scale_factor(max_distance)
 
-    for obj in space_objects:
-        assert obj.type == ObjectType.star or obj.type == ObjectType.planet, 'Wrong type of space object'
-        create_object_image(space, obj)
+        for obj in space_objects:
+            assert obj.type == ObjectType.star or obj.type == ObjectType.planet, 'Wrong type of space object'
+            create_object_image(space, obj)
+        
+        physical_time = 0   
+        displayed_time.set("0 seconds gone") 
+    
+       
+        
 
 
 def save_file_dialog():
@@ -109,7 +122,11 @@ def save_file_dialog():
     Считанные объекты сохраняются в глобальный список space_objects
     """
     out_filename = asksaveasfilename(filetypes=(("Text file", ".txt"),))
-    write_space_objects_data_to_file(out_filename, space_objects)
+    if len(out_filename) == 0 :
+        pass
+    else :
+        write_space_objects_data_to_file(out_filename, space_objects)
+    
 
 
 def main():
